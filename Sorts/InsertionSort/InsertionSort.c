@@ -7,24 +7,31 @@
 
 void insertionSort(int list[], int len);
 
-int main()
-{
-  int *list = malloc(LEN * sizeof(int));
-  generateWorstCase(list, LEN);
+int main() {
+    int *list = malloc(LEN * sizeof(int));
+    if (list == NULL) {
+        printf("Erro de alocacao de memoria.\n");
+        return 1;
+    }
+    generateRandomCase(list, LEN);
 
-  clock_t start = clock();
+    clock_t start = clock();
+    insertionSort(list, LEN);
+    clock_t end = clock();
 
-  insertionSort(list, LEN);
-    
-  clock_t end = clock();
+    double time_random = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Random: %f seconds\n\n", time_random);
 
-  double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-  printf("%f seconds\n", cpu_time_used);
+    generateWorstCase(list, LEN);
+    start = clock();
+    insertionSort(list, LEN);
+    end = clock();
 
-  validateSort(list, LEN);
+    double time_worst = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Worst: %f seconds\n", time_worst);
 
-  free(list);
-  return EXIT_SUCCESS;
+    free(list);
+    return EXIT_SUCCESS;
 }
 
 void insertionSort(int list[], int len) {

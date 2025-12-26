@@ -7,27 +7,34 @@
 
 void selectionSort(int list[], int len);
 
-int main()
-{
-  int *list = malloc(LEN * sizeof(int));
-  generateWorstCase(list, LEN);
+int main() {
+    int *list = malloc(LEN * sizeof(int));
+    if (list == NULL) {
+        printf("Erro de alocacao de memoria.\n");
+        return 1;
+    }
+    generateRandomCase(list, LEN);
 
-  clock_t start = clock();
+    clock_t start = clock();
+    selectionSort(list, LEN);
+    clock_t end = clock();
 
-  selectionSort(list, LEN);
-    
-  clock_t end = clock();
+    double time_random = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Random: %f seconds\n\n", time_random);
 
-  double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-  printf("%f seconds\n", cpu_time_used);
+    generateWorstCase(list, LEN);
+    start = clock();
+    selectionSort(list, LEN);
+    end = clock();
 
-  validateSort(list, LEN);
+    double time_worst = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Worst: %f seconds\n", time_worst);
 
-  free(list);
-  return EXIT_SUCCESS;
+    free(list);
+    return EXIT_SUCCESS;
 }
 
-int findIndexSmallest(const int list[], int start, int len) {
+int findSmallestIndex(const int list[], int start, int len) {
   int smallestIndex = start;
 
   for(int i = start + 1; i < len; i++) {
@@ -47,7 +54,7 @@ void swap(int *a, int *b) {
 void selectionSort(int list[], int len) {
   for (int i = 0; i < len - 1; i++) {
     
-    int smallestIndex = findIndexSmallest(list, i, len);
+    int smallestIndex = findSmallestIndex(list, i, len);
 
     if(smallestIndex != i) {
         swap(&list[i], &list[smallestIndex]);
