@@ -1,21 +1,30 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "../utils.c"
+
+#define LEN 100000
 
 void bubbleSort(int list[], int len);
 
-
 int main()
 {
-  int list[] = {5, 6, 10, 9, 2, 3, 4};
-  int listLen = sizeof(list) / sizeof(list[0]);
+  int *list = malloc(LEN * sizeof(int));
+  generateWorstCase(list, LEN);
 
-  bubbleSort(list, listLen);
+  clock_t start = clock();
 
-  for(int i = 0; i < listLen; i++) {
-      printf("%d\n", list[i]);
-  }
+  bubbleSort(list, LEN);
+    
+  clock_t end = clock();
 
+  double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("%f seconds\n", cpu_time_used);
+
+  validateSort(list, LEN);
+
+  free(list);
   return EXIT_SUCCESS;
 }
 
